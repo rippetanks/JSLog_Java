@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 02, 2019 alle 17:19
+-- Creato il: Gen 04, 2019 alle 21:25
 -- Versione del server: 10.1.37-MariaDB
 -- Versione PHP: 7.2.12
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `entity` (
-  `id` smallint(6) NOT NULL,
+  `id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(64) COLLATE utf8_bin NOT NULL,
   `log_key` char(32) COLLATE utf8_bin NOT NULL
 ) ENGINE=Aria DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -42,7 +42,7 @@ CREATE TABLE `entity` (
 
 CREATE TABLE `log` (
   `id` bigint(20) NOT NULL,
-  `entity` int(11) DEFAULT NULL,
+  `entity` smallint(5) UNSIGNED DEFAULT NULL,
   `storage_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `record_date` datetime NOT NULL,
   `UserAgent` varchar(256) COLLATE utf8_bin DEFAULT NULL,
@@ -50,6 +50,20 @@ CREATE TABLE `log` (
   `message` varchar(1024) COLLATE utf8_bin NOT NULL,
   `http_code` smallint(6) DEFAULT NULL,
   `level` enum('FATAL','ERROR','WARN','INFO','DEBUG','TRACE','ASSERT') COLLATE utf8_bin NOT NULL
+) ENGINE=Aria DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `profile`
+--
+
+CREATE TABLE `profile` (
+  `id` bigint(20) NOT NULL,
+  `entity` smallint(5) UNSIGNED DEFAULT NULL,
+  `profile_time` smallint(5) UNSIGNED NOT NULL,
+  `descr` varchar(32) COLLATE utf8_bin NOT NULL,
+  `date` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=Aria DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -70,6 +84,12 @@ ALTER TABLE `log`
   ADD KEY `log_entity_fk` (`entity`);
 
 --
+-- Indici per le tabelle `profile`
+--
+ALTER TABLE `profile`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 
@@ -77,12 +97,18 @@ ALTER TABLE `log`
 -- AUTO_INCREMENT per la tabella `entity`
 --
 ALTER TABLE `entity`
-  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `log`
 --
 ALTER TABLE `log`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `profile`
+--
+ALTER TABLE `profile`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

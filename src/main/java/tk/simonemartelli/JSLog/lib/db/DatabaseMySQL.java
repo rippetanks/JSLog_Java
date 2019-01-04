@@ -16,12 +16,13 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tk.simonemartelli.JSLog.lib.JSLogObject;
+import tk.simonemartelli.JSLog.lib.JSProfileObject;
 import tk.simonemartelli.JSLog.lib.config.DBConfig;
 
 /**
  *
  * @author S. Martelli
- * @version 0.1.0
+ * @version 0.2.0
  * @since 0.1.0
  */
 class DatabaseMySQL implements DatabaseJSLog {
@@ -34,6 +35,9 @@ class DatabaseMySQL implements DatabaseJSLog {
     private final static String SQL_ADD_LOG =
         "INSERT INTO log (entity, record_date, level, UserAgent, Host, message, http_code)"
         + " VALUES (?, ?, ?, ?, ?, ?, ?);";
+    
+    private final static String SQL_ADD_PROFILE =
+        "INSERT INTO profile (entity, profile_time, descr) VALUES (?, ?, ?);";
     
     protected ComboPooledDataSource cpds;
     
@@ -107,6 +111,17 @@ class DatabaseMySQL implements DatabaseJSLog {
             stmt.setString(5, obj.getHost());
             stmt.setString(6, obj.getMessage());
             stmt.setInt(7, obj.getHttpCode());
+            stmt.executeUpdate();
+        }
+    }
+    
+    @Override
+    public void addProfile(JSProfileObject obj) throws SQLException {
+        try (Connection con = this.cpds.getConnection()) {
+            PreparedStatement stmt = con.prepareStatement(SQL_ADD_PROFILE);
+            stmt.setInt(1, obj.getEntity());
+            stmt.setInt(2, obj.getTime());
+            stmt.setString(3, obj.getDesc());
             stmt.executeUpdate();
         }
     }

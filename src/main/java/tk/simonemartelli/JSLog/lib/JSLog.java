@@ -17,7 +17,7 @@ import tk.simonemartelli.JSLog.lib.exception.JSLogException;
  * Heart of the lib.
  * 
  * @author S. Martelli
- * @version 0.1.0
+ * @version 0.2.0
  * @since 0.1.0
  */
 public class JSLog {
@@ -131,6 +131,43 @@ public class JSLog {
         if(this.auth)
             throw new JSLogException("Authentication enabled! It is necessary to authenticate.");
         this.db.addLog(obj);
+    }
+    
+    /**
+     * Add profile data to the database. If authentication is enabled, it executes it.
+     * 
+     * @param logKey
+     * @param obj
+     * @throws SQLException 
+     */
+    public void profile(String logKey, JSProfileObject obj) throws SQLException {
+        if(this.auth) {
+            if(obj.getStrEntity() != null) {
+                if(!this.db.checkAuth(logKey, obj.getStrEntity())) {
+                    throw new JSLogException("Wrong credentials!");
+                }
+            }
+            else {
+                if(!this.db.checkAuth(logKey, obj.getEntity())) {
+                    throw new JSLogException("Wrong credentials!");
+                }
+            }
+        }
+        this.db.addProfile(obj);
+    }
+    
+    /**
+     * Add profile data to the database. It does not use authentication, 
+     * if it is enabled it throws an exception.
+     * 
+     * @param obj
+     * @throws JSLogException
+     * @throws SQLException 
+     */
+    public void profile(JSProfileObject obj) throws JSLogException, SQLException {
+        if(this.auth)
+            throw new JSLogException("Authentication enabled! It is necessary to authenticate.");
+        this.db.addProfile(obj);
     }
     
 }

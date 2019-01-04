@@ -7,11 +7,12 @@ package tk.simonemartelli.JSLog.lib.db;
 
 import java.sql.SQLException;
 import tk.simonemartelli.JSLog.lib.JSLogObject;
+import tk.simonemartelli.JSLog.lib.JSProfileObject;
 
 /**
  *
  * @author S. Martelli
- * @version 0.1.0
+ * @version 0.2.0
  * @since 0.1.0
  */
 public interface DatabaseJSLog {
@@ -43,6 +44,13 @@ public interface DatabaseJSLog {
      * @throws SQLException 
      */
     void addLog(JSLogObject obj) throws SQLException;
+    
+    /**
+     * 
+     * @param obj
+     * @throws SQLException 
+     */
+    void addProfile(JSProfileObject obj) throws SQLException;
     
     /**
      * Close connection to the database.

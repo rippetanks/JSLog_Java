@@ -21,12 +21,13 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tk.simonemartelli.JSLog.lib.JSLogObject;
+import tk.simonemartelli.JSLog.lib.JSProfileObject;
 import tk.simonemartelli.JSLog.lib.config.DBConfig;
 
 /**
  *
  * @author S. Martelli
- * @version 0.1.0
+ * @version 0.2.0
  * @since 0.1.0
  */
 class DatabaseMongoDB implements DatabaseJSLog {
@@ -37,6 +38,7 @@ class DatabaseMongoDB implements DatabaseJSLog {
     protected MongoDatabase db;
     protected MongoCollection c_entity;
     protected MongoCollection c_log;
+    protected MongoCollection c_profile;
     
     /**
      * 
@@ -62,6 +64,7 @@ class DatabaseMongoDB implements DatabaseJSLog {
         
         this.c_entity = this.db.getCollection("entity");
         this.c_log = this.db.getCollection("log");
+        this.c_profile = this.db.getCollection("profile");
     }
 
     @Override
@@ -100,6 +103,15 @@ class DatabaseMongoDB implements DatabaseJSLog {
                 .append("http_code", obj.getHttpCode())
                 .append("storage_date", new Date());
         this.c_log.insertOne(doc);
+    }
+    
+    @Override
+    public void addProfile(JSProfileObject obj) throws SQLException {
+        Document doc = new Document("entity", obj.getEntity())
+                .append("descr", obj.getDesc())
+                .append("profile_time", obj.getTime())
+                .append("date", new Date());
+        this.c_profile.insertOne(doc);
     }
     
 }
